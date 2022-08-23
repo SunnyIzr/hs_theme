@@ -1,0 +1,33 @@
+<div id="videoContainer" style="position: static;">
+  {% comment %}<div class="overlay"></div>{% endcomment %}
+  <img class='for-mobile' src="{{ product.metafields.my_fields.video_still_fallback | file_url }}">
+  <video autoplay="" loop="" muted="" poster="" id="vidLoop" class="hidden-xs">
+    <source src="{{ product.metafields.my_fields.video_loop_webm | file_url }}" type="video/webm">
+    <source src="{{ product.metafields.my_fields.video_loop_mp4 | file_url }}" type="video/mp4">
+  </video>
+  {% comment %}<h1 class="headline">{{ product.title }}</h1>{% endcomment %}
+  <img class='play' src="{{ 'video-play.png' | asset_url}}" />
+  <video controls="controls" poster="" id="vidFull" class="hidden-xs lazyload">
+    <source src="{{ product.metafields.my_fields.video_full_webm | file_url }}" type="video/webm">
+    <source src="{{ product.metafields.my_fields.video_full_mp4 | file_url }}" type="video/mp4">
+  </video>
+</div>
+
+
+<script>
+  const startFullVideo = () => {
+    console.log('Starting Full Video')
+    $('#vidLoop').hide()
+    $('#videoContainer img').hide()
+    $('#videoContainer .overlay').hide()
+    $('#videoContainer .headline').hide()
+    $('#vidFull').show()
+    $('#vidFull').trigger('play');
+  }
+  
+  $(document).ready(function(e){
+    $('#videoContainer').click(function(e){
+      startFullVideo()
+    })
+  })
+</script>

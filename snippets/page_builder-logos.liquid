@@ -1,0 +1,41 @@
+<div class="page_builder_section page_builder_{{block.type}} pb_bg_{{block.settings.bg_color}}" id="section_{{block.id}}">
+    <div class="container">
+        <h3 class="title">{{block.settings.title}}</h3>
+        <div class="flex_grid align-items-center" id="logos">
+            {% for i in (1..5) %}
+            {% assign image_string = 'item_image_' | append: i %}
+            {% if block.settings[image_string] != blank  %}
+            <div class="logo_item">
+                <img src="{{block.settings[image_string] | img_url: 'x50', scale: 2}}" alt="" /> 
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#logos').slick({
+            dots: true,
+            infinite: false,
+            slidesToShow:1,
+            slidesToScroll:1,
+            mobileFirst: true,
+            arrows:false,
+            responsive:[
+            {
+                breakpoint:768,
+                settings: 'unslick'
+            }
+            ]
+            
+        });
+        $(window).on('resize', function() {
+            $('#logos').slick('resize');
+        }); 
+    });
+    
+    
+    
+</script>

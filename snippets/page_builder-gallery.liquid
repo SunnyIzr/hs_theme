@@ -1,0 +1,54 @@
+<div class=" page_builder_section page_builder_{{block.type}} pb_bg_{{block.settings.bg_color}}"
+id="section_{{block.id}}">
+<div class="gallery-section container">
+    <div class="sixteen columns">
+        <h2 class=" center">{{block.settings.title}}</h2>
+        <h6 class="center">{{block.settings.sub_heading}}</h6>
+        <div class="grid_container gallery_grid" id="pb_gallery_{{block.id}}">
+            {% for i in (1..9) %}
+            {% assign image_string = 'image_' | append: i %}
+            {% assign caption_string = 'image_caption_' | append: i %}
+            {% if block.settings[image_string] != blank and  block.settings[caption_string] != blank %}
+            <div class="gallery_image gallery_item" {{ block.shopify_attributes }}>
+                <a href="{{block.settings[image_string] |  img_url: '2000x' }}" rel="gallery" class="newlightbox"
+                title="{{block.settings[caption_string]}}">
+                {{ block.settings[image_string] |  img_url: '800x800', crop: 'center' | img_tag: block.settings[caption_string] }}
+                <p class="gallery_caption">{{block.settings[caption_string]}}</p>
+            </a>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+</div>
+</div>
+<script>
+    $(function () {
+        $(document).ready(function () {
+            $('#pb_gallery_{{block.id}}').slick({
+                dots: true,
+                infinite: false,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                mobileFirst: true,
+                arrows: false,
+                responsive: [{
+                    breakpoint: 768,
+                    settings: 'unslick'
+                }]
+            });
+            $(".newlightbox").fancybox({
+                wrapCSS: 'newlightbox_wrapper',
+                helpers: {
+                    title: {
+                        type: 'inside'
+                    },
+                }
+            });
+        });
+    });
+    
+    $(window).resize(function(){
+        $('#pb_gallery_{{block.id}}').slick('setPosition');
+    });
+</script>

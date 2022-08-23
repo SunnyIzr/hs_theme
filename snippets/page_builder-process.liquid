@@ -1,0 +1,18 @@
+<div class="page_builder_section page_builder_{{block.type}} pb_bg_{{block.settings.bg_color}}" id="section_{{block.id}}">
+    <div class="container">
+        <h2 class="title">{{block.settings.title}}</h2>
+        <h6 class="subtitle center">{{block.settings.content}}</h6>
+        <div class="flex_grid flex_grid_row">
+            {% for i in (1..3) %}
+            {% assign title_string = 'title_' | append: i %}
+            {% assign content_string = 'content_' | append: i %}
+            {% if block.settings[title_string] != blank and  block.settings[content_string] != blank %}
+            <div class="flex_column_thirds">
+                <h6 class="process_title">{{block.settings[title_string]}}</h6>
+                <p>{{block.settings[content_string]}}</p>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>

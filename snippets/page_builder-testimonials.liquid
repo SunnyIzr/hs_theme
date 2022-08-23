@@ -1,0 +1,35 @@
+<div class="page_builder_section page_builder_{{block.type}}" id="section_{{block.id}}">
+    {%- comment -%}
+    <img src="{{block.settings.background_image_desktop | img_url: 'master'}}" />
+    <img src="{{block.settings.background_image_mobile | img_url: 'master'}}" />
+    {%- endcomment -%}
+    <div class="container">
+        <div class="testimonials">
+            {% for i in (1..3) %}
+            {% assign author_string  = 'author_' | append: i %}
+            {% assign testimonial_string = 'testimonial_' | append: i %}
+            {% if block.settings[author_string] != blank and block.settings[testimonial_string] != blank  %}
+            <div class="testimonial_item">
+                <img src="{{'stars.png' | asset_img_url: 'x15', scale: 2}}" class="testimonial_stars"/>
+                <h3>{{block.settings[testimonial_string]}}</h3>
+                <p class="testimonial_author">{{block.settings[author_string]}}</p>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<style>
+    #section_{{block.id}} {
+        background: url('{{block.settings.background_image_desktop | img_url: 'master'}}') center center no-repeat; 
+        background-size: cover;
+    } 
+</style>
+<script>
+    $(function () {
+        $('.testimonials').slick({
+            prevArrow:"<button class='slick-prev slick-arrow'><img class='' src='{{'slide_left.png' | asset_img_url: 'master'}}'></button>",
+            nextArrow:"<button class='slick-next slick-arrow'><img class='' src='{{'slide_right.png' | asset_img_url: 'master'}}'></button>"
+        });
+    });
+</script>

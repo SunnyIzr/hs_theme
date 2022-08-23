@@ -1,0 +1,22 @@
+{% section 'page_builder-custom-schools' %}
+<style>
+    .newsletter_signup {
+        display: none;
+    }
+</style>
+<script>
+
+onResize = function() {
+    if($(window).width() <= 767) {
+        var current_padding =  $('.promo_banner').first().outerHeight();
+        $('.global-wrapper').css('margin-top', 0)
+    } else {
+        var current_padding = $('.header').first().outerHeight() + $('.promo_banner').first().outerHeight();
+    }
+    $('.global-wrapper').css('padding-top', current_padding)
+   }
+
+$(document).ready(onResize);
+$(window).resize(onResize);
+
+</script>

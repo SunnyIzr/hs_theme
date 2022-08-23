@@ -1,0 +1,598 @@
+<div class="container main content main-wrapper">
+  {% comment %}
+  <div class="sixteen columns">
+    <div class="clearfix breadcrumb">
+      <div class="nav_arrows">
+        {% if collection.previous_product %}
+        <a href="{{ collection.previous_product }}" title="{{ 'products.general.previous_product_html' | t }}" class="ss-icon prev"><span class="icon-circle-left"></span></a>
+        {% endif %}
+
+        {% if collection.next_product %}
+        <a href="{{collection.next_product}}" title="{{ 'products.general.next_product_html' | t }}" class="ss-icon next"><span class="icon-circle-right"></span></a>
+        {% endif %}
+      </div>
+      {% include "product-breadcrumb" %}
+    </div>
+  </div>
+  {% endcomment %}
+  {% comment %}Check to see if sidebar should be enabled{% endcomment %}
+  {% comment %}
+  {% if section.blocks.size > 0 %}
+  {% assign sidebar = true %}
+  {% else %}
+  {% assign sidebar = false %}
+  {% endif %}
+  {% endcomment %}
+  {% assign sidebar = false %}
+
+  {% if sidebar %}
+  {% include 'sidebar' %}
+  <div class="twelve columns">
+    <div class="product-{{ product.id }}">
+      {% else %}
+      <div class="sixteen columns">
+        <div class="product-{{ product.id }}">
+          {% endif %}
+
+          <div class="section product_section clearfix
+          {% if product.images.size > 1 %} thumbnail_position--{{settings.thumbnail_position}} {% endif %} product_slideshow_animation--{{settings.product_slideshow_animation}}"
+          data-thumbnail="{{settings.thumbnail_position}}"
+          data-slideshow-animation="{{settings.product_slideshow_animation}}"
+          data-slideshow-speed="{{settings.slideshow_speed}}"
+          itemscope itemtype="http://schema.org/Product">
+
+          <div class="{% if sidebar %}seven{% else %}nine{% endif %} columns {% if product-images == blank %}{% if section.settings.product_images_position == 'left' %}alpha{% else %}omega{% endif %}{% endif %} {% if section.settings.product_images_position == 'right' %}mobile_only{% endif %}">
+            <div class="product_images_column">
+              <div class="product_thumbs" >
+                {% include 'product-thumbs' %}
+              </div>
+              <div class="feature_image_wrapper" style="">
+                {% include 'product-images-new' %}
+              </div>
+            </div>
+          </div>
+
+          <div class="{% if sidebar %}five{% else %}seven{% endif %} columns {% if section.settings.product_images_position == 'left' %}omega{% else %}alpha{% endif %}">
+
+            {% assign collection_handles = product.collections | map: 'handle' %}
+            {% assign variant = product.selected_or_first_available_variant %}
+            <h1 class="product_name" itemprop="name">{{ product.title }}</h1>
+
+            {% if section.settings.display_vendor %}
+            <p class="vendor">
+              <span itemprop="brand">{{ product.vendor | link_to_vendor }}</span>
+            </p>
+            {% endif %}
+
+            {% if variant.sku != blank and section.settings.display_sku %}
+            <p class="sku">
+              <span itemprop="sku">{{ variant.sku }}</span>
+            </p>
+            {% endif %}
+
+            {% if settings.enable_shopify_product_badges %}
+            <a href="#shopify-product-reviews" class="review_link"><span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span></a>
+            {% endif %}
+            <hr class="pdp_hr" />
+            {% assign current_title_work = product.title | split :'-' %}
+            {% assign current_product_color = current_title_work[1] %}
+            {% for tag in product.tags %}
+            {% if tag contains 'collection:' %}
+            {% assign swatch_collection = tag | split: ': '%}
+            {% assign swatch_collection = swatch_collection[1] | trim%}
+            {% endif %}
+            {% endfor %}
+            {% if swatch_collection %}
+            <div class="pdp_swatch_container">
+              <span class="label">COLOR: <span id="current_color">{{current_product_color}}</span></span>
+              <div class="pdp_swatches">
+                {% for collection_product in collections[swatch_collection].products %}
+                {% assign title_work = collection_product.title | split :'-' %}
+                {% assign color_handle = title_work[1] | handle %}
+                {% assign color_swatch = color_handle | append: '.jpeg' %}
+                {% assign active_product = '' %}
+                {% if product.url == collection_product.url %}
+                {% assign active_product = 'active_product' %}
+                {% endif %}
+                <div class="swatch_wrapper {{active_product}}"><a href="{{collection_product.url | within: collection}}" data-color="{{title_work[1] | trim}}" class="pdp_swatch_link"><img src="{{ color_swatch | asset_img_url: 'master'}}" /></a></div>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+
+            {% unless collection_handles contains 'coming-soon' %}
+            <p class="modal_price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+              <meta itemprop="priceCurrency" content="{{ shop.currency }}" />
+              <meta itemprop="seller" content="{{ shop.name | escape }}" />
+              <link itemprop="availability" href="http://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}">
+              <meta itemprop="itemCondition" content="New" />
+
+              <span class="sold_out">{% if variant.available == false %}{{ 'products.product.sold_out' | t }}{% endif %}</span>
+              <span itemprop="price" content="{{ variant.price | money_without_currency }}" class="{% if variant.compare_at_price > variant.price %}sale{% endif %}">
+              {% comment %}
+              <span class="current_price {% if product.available == false %}hidden{% endif %}">
+                {% if variant.price > 0 %}
+                  <span class="money">{{ variant.price | money }}</span>
+                {% else %}
+                  {{ settings.free_price_text }}
+                {% endif %}
+              </span>
+            </span>
+            <span class="was_price">
+              {% if variant.price < variant.compare_at_price and variant.available %}
+                <span class="money">{{ variant.compare_at_price | money }}</span>
+              {% endif %}
+            </span>
+            {% endcomment %}
+          </p>
+          {% if settings.notify_me_form %}
+          {% include 'product-notify-me' %}
+          {% endif %}
+          {% endunless %}
+{% comment %}
+          {% if section.settings.product_description_position == "top" %}
+          {% if product.description != blank %}
+          <div class="description" itemprop="description">
+           {{ product.description | split: '<!-- split -->' | first }}
+         </div>
+         {% endif %}
+         {% endif %}
+{% endcomment %}
+         {% unless collection_handles contains 'coming-soon' %}
+         {% include 'product-form' with 'product' %}
+         {% endunless %}
+
+         {% if product.description != blank %}
+         <div class="description" itemprop="description">
+
+          {% comment %}{{ product.description | split: '<!-- split -->' | first }}{% endcomment %}
+          {{ product.description | split: '<!--split2020-->' | first }}
+          {% if product.description contains '<!--split2020-->' %}
+          {% assign product_description = product.description | split: '<!--split2020-->' %}
+          <div class="product_description_accordion">
+            <h3><a href="#" class="expand_product_details_content">Product Details <span style="float: right;" id="open_accord">+</span><span style="float: right;display:none;" id="close_accord">-</span></a></h3>
+            <div id="product_details_content">
+              {{product_description[1]}}
+            </div>
+          </div>
+          {% endif %}
+
+        </div>
+        {% endif %}
+
+
+        {% if settings.enable_shopify_review_comments and settings.review_position == "top" %}
+        <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+        {% endif %}
+
+        {% if section.settings.display_collections or section.settings.display_tags or section.settings.display_type %}
+        <hr />
+        {% endif %}
+
+        <div class="meta">
+          {% if section.settings.display_social_buttons %}
+          <share-button></share-button>
+          {% endif %}
+
+          {% if section.settings.display_collections %}
+          <p>
+            <span class="label">{{ 'products.product.collections' | t }}:</span>
+            <span>
+             {% for col in product.collections %}
+             <a href="{{ col.url }}" title="{{ col.title }}">{{ col.title }}</a>{% unless forloop.last %},{% endunless %}
+             {% endfor %}
+           </span>
+         </p>
+         {% endif %}
+
+         {% if section.settings.display_tags %}
+         <p>
+           {% for tag in product.tags %}
+           {% if forloop.first %}
+           <span class="label">{{ 'products.product.tags' | t }}:</span>
+           {% endif %}
+
+           {% unless tag contains 'meta-' %}
+           <span>
+             <a href="/collections/{% if collection %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handle }}" title="{{ 'products.product.products_tagged' | t: tag: tag }}">{{ tag }}</a>{% unless forloop.last %},{% endunless %}
+           </span>
+           {% endunless %}
+           {% endfor %}
+         </p>
+         {% endif %}
+
+         {% if section.settings.display_type %}
+         <p>
+          <span class="label">{{ 'products.product.product_types' | t }}:</span>
+          <span>{{ product.type | link_to_type }}</span>
+        </p>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if section.settings.product_images_position == 'right' %}
+    <div class="{% if sidebar %}seven{% else %}nine{% endif %} columns {% if product-images == blank %}{% if section.settings.product_images_position == 'left' %}alpha{% else %}omega{% endif %}{% endif %} mobile_hidden">
+      {% include 'product-images' %}
+    </div>
+    {% endif %}
+  </div>
+
+  {% if product.description contains "<!-- split -->"  %}
+  <br class="clear" />
+  <div class="section clearfix">
+    <div class="description">
+      {{ product.description | split: '<!-- split -->' | last }}
+    </div>
+  </div>
+  {% endif %}
+  {% if section.settings.pdp_video_url %}
+
+
+</div>
+</div>
+</div>
+{% if section.settings.pdp_video_url.type == 'youtube'%}
+{% assign base_link = 'https://www.youtube.com/embed/' %}
+{% else %}
+{% assign base_link = 'https://player.vimeo.com/video/' %}
+{% endif %}
+<div class="pdp_video_section">
+  <div class="container" >
+    <div class="pdp_video_wrapper" >
+      <div class="responsive-video">
+        <div class="video-container"><iframe width="853" height="480" src="{{base_link}}{{section.settings.pdp_video_url.id}}" frameborder="0" allowfullscreen></iframe></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="container main content secondary-content main-wrapper">
+  <div class="sixteen columns">
+    {% endif %}
+    <div class="pdp_section_blocks">
+      {% for block in section.blocks %}
+      {% if block.type == 'pdp_block_secton' %}
+      <div class="pdp_info_block image_with_text {{block.settings.image_side}}_side_image">
+        {% if block.settings.image_side == 'left' %}
+        <div class="nine columns alpha image_column" >
+          <img src="{{block.settings.image | img_url: 'master'}}" />
+        </div>
+        <div class="seven columns omega content_column" >
+          <h2>{{block.settings.title}}</h2>
+          <p>{{block.settings.content}}</p>
+        </div>
+
+        {% else %}
+        <div class="seven columns alpha  content_column" >
+          <h2>{{block.settings.title}}</h2>
+          <p>{{block.settings.content}}</p>
+        </div>
+        <div class="nine columns omega image_column" >
+          <img src="{{block.settings.image | img_url: 'master'}}" />
+        </div>
+
+        {% endif %}
+
+
+      </div>
+
+      {% endif %}
+
+
+      {% endfor %}
+
+
+{% comment %}
+  <div class="pdp_info_block image_with_text">
+    <div class="seven columns alpha content_column" >
+      <h2>HEADINLINE</h2>
+      <p>Vivamus sed libero sed augue aliquet congue. Fusce faucibus a justo sed pellentesque. Nullam aliquet, enim et rhoncus tempor, nisl lectus facilisis dui, sit amet feugiat ligula sapien quis sem. Aliquam nec massa ut ligula tincidunt bibendum. Suspendisse eu metus nec erat maximus porta. Mauris ut neque at tellus lobortis suscipit. Aliquam nisl urna, pretium quis rutrum ut, dapibus porttitor odio. Quisque in dolor eget turpis consequat laoreet nec eu mi. Cras fringilla mi et sapien gravida elementum. </p>
+    </div>
+
+    <div class="nine columns omega image_column" >
+      <img src="{{'pdp_placeholder.jpg' | asset_img_url: 'master'}}" />
+    </div>
+  </div>
+
+  {% endcomment %}
+
+  {% if section.settings.full_width_image %}
+  <div class="pdp_image_block">
+    <img src="{{section.settings.full_width_image | img_url: 'master'}}" />
+  </div>
+  {% endif %}
+
+
+</div>
+
+
+</div>
+
+{% if product.metafields.my_fields.show_video %}
+  {% include 'product-embedded-video' %}
+{% endif %}
+
+{% if section.settings.display_related_products %}
+{% capture limit %}{{ section.settings.products_per_row | plus: 1 }}{% endcapture %}
+
+{% if collection and collection.all_products_count > 1 %}
+{% assign col = collection.handle %}
+{% else %}
+{% assign col = product.collections.last.handle %}
+{% endif %}
+
+{% for tag in product.tags %}
+{% if tag contains 'meta-related-collection-' %}
+{% assign related_collection_handle = tag | remove: 'meta-related-collection-' %}
+{% if collections[related_collection_handle].all_products_count > 0 %}
+{% assign col = related_collection_handle %}
+{% assign collection = collections[col] %}
+{% capture limit %}{{ collection.products_count | plus: 1 }}{% endcapture %}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% assign limit = 5 %}
+{% if col and collections[col].all_products_count > 0 %}
+{% if collections[col].all_products_count != 1 or collections[col].products.first.id != product.id %}
+<br class="clear" />
+<h4 class="title center">{{ 'products.product.related_items' | t }}</h4>
+{% comment %}<div class="feature_divider"></div>{% endcomment %}
+
+{% assign skip_product = product %}
+{% assign products = collections[col].products %}
+{% assign products_per_row = section.settings.products_per_row %}
+{% assign products_per_row = 4 %}
+{% include 'product-loop' with sidebar: sidebar %}
+{% endif %}
+{% endif %}
+{% endif %}
+
+
+{% if settings.enable_shopify_review_comments and settings.review_position == "bottom" %}
+<div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+{% endif %}
+
+</div>
+</div>
+
+<style>
+  {% if section.settings.set_product_height %}
+  .product_slider .slides img { max-height: {{ section.settings.product_height }}px; }
+  {% endif %}
+</style>
+<script>
+  var current_color = '{{current_product_color}}';
+  $(function() {
+
+    $('.review_link').click(function(event) {
+      /* Act on the event */
+      event.preventDefault();
+      var $target = $($(this).attr('href'));
+      var $header = $('.header');
+      $('html, body').animate({
+        scrollTop: $target.offset().top - $header.height()
+      }, 300);
+    });
+    $('.quantity').change(function(event) {
+      /* Act on the event */
+      var $productForm = $('form.product_form');
+      $('.add_to_cart span.money').html(Shopify.formatMoney($(this).val() * $('.add_to_cart span.money').attr('data-price'), $productForm.data('money-format')).replace('.00', ''));
+    });
+    $('.pdp_swatch_link').hover(function() {
+      $('#current_color').html($(this).attr('data-color'));
+    }, function() {
+      $('#current_color').html(current_color);
+    });
+
+    $('.expand_product_details_content').click(function(event) {
+      event.preventDefault();
+      $('#product_details_content').slideToggle('normal', function(el) {
+        if ($(this).is(":hidden")) {
+          $('#open_accord').show();
+          $('#close_accord').hide();
+        } else {
+         $('#open_accord').hide();
+         $('#close_accord').show();
+       }
+     });
+    });
+
+
+    $('.pdp_thumb_link').click(function(event) {
+      event.preventDefault();
+      var selected_el = $(this).attr('data-index');
+      $('#product_feature_image_slider').slick('slickGoTo', selected_el);
+    });
+  })
+  $(window).on('load', function() {
+    $('.pdp_thumb_slider').slick({
+      'vertical': true,
+      'slidesToShow': 6,
+      'slidesToScroll': 6,
+      'nextArrow': '<button class="pdp_carousel_arrow"><img src="{{'pdp-down.png' | asset_img_url: '13x'}}"/></button>',
+      'prevArrow': '<button class="pdp_carousel_arrow"><img src="{{'pdp-up.png' | asset_img_url: '13x'}}"/></button>',
+      //'asNavFor': '#product_feature_image_slider'
+    });
+
+    $('#product_feature_image_slider').slick({
+      'slidesToShow': 1,
+      'arrows': false,
+      'fade': true,
+      'centerMode': false,
+      'focusOnSelect': true
+    });
+    $('.pdp_thumb_link').click(function(event) {
+      event.preventDefault();
+      var slideno = $(this).attr('data-index');
+      $('#product_feature_image_slider').slick('slickGoTo', slideno);
+    });
+        $('#product_feature_image_slider').slick('setPosition');
+
+  })
+
+</script>
+{% schema %}
+{
+  "name": "Product",
+  "class": "product-template-section",
+  "settings": [{
+  "type": "checkbox",
+  "id": "product_breadcrumb",
+  "label": "Show breadcrumb links"
+},
+{
+  "type": "checkbox",
+  "id": "display_tags",
+  "label": "Show tags"
+},
+{
+  "type": "checkbox",
+  "id": "display_type",
+  "label": "Show type"
+},
+{
+  "type": "checkbox",
+  "id": "display_vendor",
+  "label": "Show vendor"
+},
+{
+  "type": "checkbox",
+  "id": "display_sku",
+  "label": "Show SKU"
+},
+{
+  "type": "checkbox",
+  "id": "display_social_buttons",
+  "label": "Show social media share icons",
+  "default": true
+},
+{
+  "type": "checkbox",
+  "id": "display_collections",
+  "label": "Show collections"
+},
+{
+  "type": "checkbox",
+  "id": "display_related_products",
+  "label": "Show related products ([?](https:\/\/help.outofthesandbox.com\/hc\/en-us\/articles\/115006909487-Related-Products))",
+  "default": true
+},
+{
+  "type": "range",
+  "id": "products_per_row",
+  "label": "Related products per row",
+  "min": 2,
+  "max": 4,
+  "step": 1,
+  "default": 3
+},
+{
+  "type": "radio",
+  "id": "product_description_position",
+  "label": "Description position",
+  "options": [{
+  "value": "top",
+  "label": "Above 'add to cart'"
+},
+{
+  "value": "bottom",
+  "label": "Below 'add to cart'"
+}
+]
+},
+{
+  "type": "radio",
+  "id": "product_images_position",
+  "label": "Images position",
+  "options": [{
+  "value": "left",
+  "label": "Left"
+},
+{
+  "value": "right",
+  "label": "Right"
+}
+]
+},
+{
+  "type": "checkbox",
+  "id": "set_product_height",
+  "label": "Set height of product images"
+},
+{
+  "type": "range",
+  "id": "product_height",
+  "label": "Product image height",
+  "min": 200,
+  "max": 800,
+  "step": 10,
+  "default": 500,
+  "unit": "px"
+},
+{
+  "type": "image_picker",
+  "id": "full_width_image",
+  "label" :"Full Width Image"
+},
+{
+  "id": "pdp_video_url",
+  "type": "video_url",
+  "label": "Video URL",
+  "accept": ["youtube", "vimeo"]
+},
+{
+  "type": "header",
+  "content": "Sidebar"
+},
+{
+  "type": "paragraph",
+  "content": "Create a sidebar by adding content blocks."
+},
+{
+  "type": "checkbox",
+  "id": "toggle",
+  "label": "Toggle sidebar content"
+}
+],
+"blocks": [
+{
+  "type": "pdp_block_secton",
+  "name": "Image/Text Row",
+  "limit": 3,
+  "settings": [{
+  "type": "text",
+  "id": "title",
+  "label": "Heading",
+  "default": "Headline"
+},
+{
+  "type": "textarea",
+  "id": "content",
+  "label": "Content"
+},
+{
+  "type": "image_picker",
+  "id": "image",
+  "label": "Image"
+},
+{
+ "type":      "select",
+ "id":        "image_side",
+ "label":     "Image Side",
+ "options": [
+ {
+   "value": "left",
+   "label": "Left"
+ },
+ {
+   "value": "right",
+   "label": "Right"
+ }
+ ],
+ "default":   "left"
+}
+]
+}
+]
+}
+{% endschema %}

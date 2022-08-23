@@ -1,0 +1,55 @@
+<div class="page_builder_section page_builder_{{block.type}} pb_bg_{{block.settings.bg_color}}"
+  id="page_builder_inquire_form">
+  <div class="container">
+    <h2 class="title center">START YOUR ORDER</h2>
+    <h6 class="center">Fill out the form below to start or call us at 1.855.256.6631.</h6>
+    <form action="https://formspree.io/f/mzbyqpdv" method="post" enctype="multipart/form-data">
+      <div class="form_row">
+        <div class="flex_column">
+          <label for="first_name">First Name*</label>
+          <input id="first_name" name="first_name" type="text" required>
+        </div>
+        <div class="flex_column">
+          <label for="last_name">last Name*</label>
+          <input id="last_name" name="last_name" type="text" required>
+        </div>
+      </div>
+      <div class="form_row">
+        <div class="flex_column">
+          <label for="first_name">Email*</label>
+          <input id="email" name="email" type="text" required>
+        </div>
+        <div class="flex_column">
+          <label for="last_name">Phone*</label>
+          <input id="phone" name="phone" type="text" required>
+        </div>
+      </div>
+      <div class="form_row">
+        <div class="flex_column full_width">
+          <label for="first_name">What bags are you interested in?</label>
+          <input id="what_bags_are_you_interested_in" name="what_bags_are_you_interested_in" type="text">
+        </div>
+      </div>
+      <div class="form_row">
+        <div class="flex_column">
+          <label for="first_name">How many pieces?</label>
+          <input id="how_many_pieces" name="how_many_pieces" type="text">
+        </div>
+        <div class="flex_column">
+          <label for="last_name">When do you need them by?</label>
+          <input id="when_do_you_need_them_by" name="when_do_you_need_them_by" type="text">
+        </div>
+      </div>
+      <div class="form_row">
+        <div class="flex_column">
+          <label for="last_name">Add your logo:</label>
+          <input id="add_your_logo" name="add_your_logo" type="file" class="file_input" accept="image/png, image/jpeg">
+        </div>
+        <div class="flex_column">
+          <label>&nbsp;</label>
+          <button id="submit" name="submit" type="submit" class="btn btn_form_submit">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

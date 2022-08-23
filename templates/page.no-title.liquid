@@ -1,0 +1,8 @@
+{% capture captured_page %}
+<div class="container main content main-wrapper">
+  <div class="sixteen columns page">
+    {% include 'page-multi-column', content: page.content %}
+  </div>
+</div>
+{% endcapture %}
+{% include 'password-protect' %}

@@ -1,0 +1,341 @@
+<div class="container main content main-wrapper">
+  <div class="sixteen columns clearfix collection_nav">
+    <h1 class="center">{{ 'cart.general.title' | t }}</h1>
+    <div class="feature_divider"></div>
+  </div>
+
+  {% if cart.item_count == 0 %}
+    <div class="sixteen columns">
+      <div class="section clearfix">
+        <p class="quote">{{ 'cart.general.continue_browsing_html' | t }}</p>
+        <br class="clear" />
+
+        {% assign collection = '' %}
+        {% assign products = collections[section.settings.frontpage_collection].products %}
+        {% assign products_per_row = section.settings.frontpage_products_per_row %}
+        {% include 'product-loop' %}
+      </div>
+    </div>
+  {% else %}
+    <form action="/cart" method="post" id="cart_form">
+      <div class="section clearfix">
+        <div class="ten columns cart_items">
+          <h4 class="title">{{ 'cart.general.products' | t }}</h4>
+
+          {% for item in cart.items %}
+            <div class="five columns alpha">
+              <a id='link2-{{ item.key | replace: ":", "-"}}' href="{{ item.url }}" title="{{ item.title | escape }}" class="cart_page_image">
+                <img  id="img-{{ item.key | replace: ":", "-" }}"
+                      src="{{ item | img_url: '100x' }}"
+                      alt="{{ item.title | escape }}"
+                      class="lazyload lazyload--fade-in"
+                      style="max-width: {{- item.image.width -}}px"
+                      data-sizes="auto"
+                      data-src="{{ item | img_url: '900x' }}"
+                      data-srcset=" {{ item | img_url: '2048x' }} 2048w,
+                                    {{ item | img_url: '1600x' }} 1600w,
+                                    {{ item | img_url: '1200x' }} 1200w,
+                                    {{ item | img_url: '1000x' }} 1000w,
+                                    {{ item | img_url: '800x' }} 800w,
+                                    {{ item | img_url: '600x' }} 600w,
+                                    {{ item | img_url: '400x' }} 400w"
+                       />
+              </a>
+            </div>
+
+            <div class="five columns omega">
+              <p>
+                <a id="link-{{item.key | replace: ":", "-"}}" href="{{ item.url }}">
+                  {% if item.product.title == 'Personalized' %}
+                    Personalized
+                    {% for p in item.properties %}
+                      {% if p.first == 'productName' %}
+                        {{ p.last }}
+                      {% endif %}
+                    {% endfor %}
+                  {% else %}
+                    {{ item.product.title }}
+                  {% endif %}
+                </a>
+              </p>
+              {% unless item.product.has_only_default_variant or item.variant.title contains "Title" %}
+                <p class="meta">
+                  {% for option in item.product.options %}
+                    {% unless option contains "Title" %}
+                        <span class="label">{{ option }}:</span> <span>{{ item.variant.options[forloop.index0] }}</span><br />
+                    {% endunless %}
+                  {% endfor %}
+                </p>
+              {% endunless %}
+			{% assign hasmonogram = false %}
+              {% if item.properties %}{% assign hasmonogram = true %}
+                <p>
+                  {% for p in item.properties %}
+                    {% unless p.last == blank %}
+                      {% if p.last contains '/uploads/' %}
+                        {{ p.first }}: <a class="lightbox" href="{{ p.last }}">{{ 'cart.general.uploaded_file' | t }}</a><br />
+                      {% else %}
+                        {% unless p.first == 'productName' or 'decoId' %}
+                          {{ p.first }}: {{ p.last }}<br />
+                        {% endunless %}
+                      {% endif %}
+                    {% endunless %}
+                  {% endfor %}
+                </p>
+              {% endif %}
+
+              <p class="price_total">
+                <span class="money">{{ item.price | money_with_currency }}</span>
+              </p>
+
+              <p id="quantity_{{ forloop.index }}">
+                <label for="updates_{{ item.id }}" class="quantity_label">{{ 'cart.general.quantity' | t }}:</label>
+                <input type="number" min="0" size="3" maxlength="3" class="quantity" name="updates[]" id="updates_{{ item.id }}" value="{{ item.quantity }}" data-line-id="{{ forloop.index }}" {% if item.variant.inventory_management != blank and item.variant.inventory_quantity > 0 and item.variant.inventory_policy == "deny" %}max="{{ item.variant.inventory_quantity }}"{% endif %} />
+              </p>
+
+              <p class="remove_item">
+                <a href="/cart/change?line={{ forloop.index }}&amp;quantity=0" title="{{ 'cart.general.remove' | t }}">{{ 'cart.general.remove' | t }}</a>
+              </p>
+            </div>
+            <br class="clear" />
+            <br class="clear" />
+          {% endfor %}
+        </div>
+
+        <div class="five columns offset-by-one">
+          <h4 class="subtotal">
+            {{ 'cart.general.subtotal' | t }}
+          </h4>
+
+          <p class="subtotal_amount">
+            <strong>
+              <span class="money"><span class="wh-original-cart-total"><span class="wh-original-price">{{ cart.total_price | money_with_currency }}</span></span><span class="wh-cart-total"></span><div class="additional-notes"><span class="wh-minimums-note"></span><span class="wh-extra-note"></span></div></span>
+            </strong>
+            {% comment %}
+            <small id="estimated-shipping" style="display:none">+ <em><span class="money">{{ 0 | money }}</span> {{ 'cart.shipping_calculator.estimated_shipping' | t }}</em></small>
+            {% endcomment %}
+
+            <small class="excluding_tax"><em>{{ 'cart.general.excluding_tax_shipping' | t }}</em></small>
+          </p>
+
+          {% if settings.show_multiple_currencies %}
+            <p>
+              <small>
+                {{ 'cart.general.orders_processed_in_currency_html' | t: currency: shop.currency }}
+              </small>
+            </p>
+          {% endif %}
+
+          {% if section.settings.display_special_instructions %}
+            <label for="cart-note">{{ 'cart.general.note' | t: shop_name: shop.name }}:</label>
+            <textarea id="cart-note" name="note" rows="2">{{ cart.note }}</textarea>
+          {% endif %}
+
+          {% if section.settings.display_tos_checkbox %}
+            <div class="tos_checkbox">
+              <input type="checkbox" class="tos_agree" id="cart_agree" required />
+              <label class="tos_label" for="cart_agree">
+                {{ section.settings.tos_richtext }}
+              </label>
+            </div>
+          {% endif %}
+
+          <p>
+            <input type="submit" class="action_button add_to_cart" id="checkout" name="checkout" value="{{ 'cart.general.checkout' | t }}" />
+          </p>
+
+          {% if content_for_additional_checkout_buttons and settings.cart_action != 'ajax' %}
+            <div class="additional-checkout-buttons">
+              {{ content_for_additional_checkout_buttons | google_button_options: 'transparent' }}
+            </div>
+          {% endif %}
+
+          {% if cart.item_count > 0 %}
+            <p class="continue_shopping">
+              <a href="{% if cart.items.first.product.collections != blank %}{{ cart.items.first.product.collections.last.url }}{% else %}/collections/all{% endif %}">{{ 'cart.general.continue_shopping_link_html' | t }}</a>
+            </p>
+          {% endif %}
+          {%- if hasmonogram == true -%}
+          	{% render 'monogram-notes' %}
+          {%- endif -%}
+        </div>
+      </div>
+    </form>
+  {% endif %}
+</div>
+
+{% schema %}
+
+{
+  "name": "Cart page",
+  "class": "cart-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "display_special_instructions",
+      "label": "Show \"note\" text box"
+    },
+    {
+      "type": "checkbox",
+      "id": "display_tos_checkbox",
+      "label": "Show \"agree to terms\" checkbox"
+    },
+    {
+      "type": "richtext",
+      "id": "tos_richtext",
+      "label": "Agree to terms text",
+      "default": "<p>I Agree with the Terms & Conditions</p>"
+    }
+  ]
+}
+
+{% endschema %}
+
+<script>
+  // Creating this data structure in case user is updating an existing line item
+  
+  const decoIdToLineItem = {
+    {% for item in cart.items %}
+      {% for p in item.properties %}
+        {% if p.first contains 'decoId' %}
+          {{ p.last }}: {{ item.id }},
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+  }
+
+  $(document).ready(function(){
+    // If this is a deconetwork callback, handle add to cart accordingly
+    if ("edit_link" in Shopify.queryParams && "tn" in Shopify.queryParams){
+      
+      if (decoIdToLineItem[Shopify.queryParams.id]){
+        ajaxUpdateCartSimple(
+          decoIdToLineItem[Shopify.queryParams.id],
+          Shopify.queryParams.qty
+          )
+          // decoId already exists in cart so update
+      } else {
+          // decoId does not exist in cart so add
+
+          // Get Variant ID to be added
+        let productHandle = Shopify.queryParams.product_code
+        let variantId
+        jQuery.getJSON(window.Shopify.routes.root + 'products/' + productHandle + '.js', function(product) {
+          let variantId
+          product.variants.forEach(item => {
+            if (item.title.includes("Embroider")) {
+              variantId = item.id
+            }
+          });
+          ajaxAddToCart(
+            variantId,
+            Shopify.queryParams.qty,
+            Shopify.queryParams.id, 
+            Shopify.queryParams.edit_link, 
+            Shopify.queryParams.name.replaceAll('+', ' '), 
+            Shopify.queryParams.options,
+            Shopify.queryParams.tn_medium,
+          )
+        } );
+      }
+
+    }
+
+    let responseObject
+    // Grab deconetwork details
+    $.ajax({
+      url: '/cart.js',
+      dataType: 'json',
+      cache: false,
+      type: 'get',
+      success: function(data){
+        responseObject = data
+        // const containsCustom = !!data.items.find(item => item.handle.startsWith('generic-'))
+        const containsCustom = true
+        if (containsCustom){
+          const cartToken = data.token
+          $.ajax({
+            url: 'https://whispering-woodland-73749.herokuapp.com/carts/' + cartToken,
+            dataType: 'json',
+            cache: false,
+            type: 'get',
+            success: function(data){
+              updateCustomLineItems(data)
+            }
+          })
+        }
+      }
+    });
+
+    function updateCustomLineItems(lineItemData){
+      lineItemData.forEach(item => {
+        $('#img-' + item.line_item_id).attr('srcset',"https://hudsonsutler.secure-decoration.com" + item.image_link + "?timestamp=" + new Date().getTime())
+        $('#link-' + item.line_item_id).attr('href',"https://hudsonsutler.secure-decoration.com" + item.edit_link)
+        $('#link2-' + item.line_item_id).attr('href',"https://hudsonsutler.secure-decoration.com" + item.edit_link)
+      })
+    }
+
+
+  })
+
+
+  // $.ajax({
+  //   url: 'https://whispering-woodland-73749.herokuapp.com/carts',
+  //   type: 'post',
+  //   dataType: 'json',
+  //   cache: false,
+  //   data: {
+  //     cart: {
+  //       cart_id: 'foo',
+  //       line_item_id: 'bar',
+  //       deconetwork_id: 'this'
+  //     }
+  //   }
+  // })
+
+  // $.ajax({
+  //   url: 'https://whispering-woodland-73749.herokuapp.com/carts',
+  //   type: 'get',
+  //   dataType: 'json',
+  //   cache: false,
+  //   success: function(data){
+  //     console.log(data)
+  //   }
+  // })
+  // 2. When rendering generics, should render the what we need
+      // 1. Check to see if cart has a generic product in it
+      // 2. If it does pull all the line item entries for this cart
+      // 3. Match each line item object to each actual line item in UI
+      // 4. Render each line item using the properties from line item object received from server
+  // 3. Look into line item properties: https://shopify.dev/api/ajax/reference/cart?ref=&campaignid=14410854600&adgroupid=129184727506&targetid=dsa-1462869937398&creative=560671165850&device=c&keyword=&utm_source=google&utm_medium=cpc&gclid=Cj0KCQiA3fiPBhCCARIsAFQ8QzXrcy_B2T4q2kz2p1BveIoe2yWA1kIMi6QBnocY4IdhAEsboMjN410aAk6ZEALw_wcB
+
+
+  // Small Things
+  // 1 When cart is detected to be deco, we need a loader
+  // 2 Line item properties for customizations
+
+  // color: "75315061"
+  // color_id: "174413756"
+  // discount: "0.0"
+  // edit_link: "/designer/customize?cpid=2869429861&ei=1"
+  // id: "2869429861"
+  // line_total: "50.0"
+  // name: "Canvas+and+Leather+Laptop+Bag"
+  // options: "Colors:+Brown<br/><br/>Size:+Medium+x+5"
+  // product_code: "TEST2"
+  // product_id: "231642631"
+  // qty: "5"
+  // sizes: "2"
+  // tax: "0.0"
+  // tn: "/configured_product_view/s/image/949/729/861/s-3.jpg?1644078489"
+  // tn_medium: "/configured_product_view/s/image/949/729/861/s-2.jpg?1644078489"
+  // ?color=75315061&product_code=TEST2&tn_medium=%2Fconfigured_product_view%2Fs%2Fimage%2F949%2F729%2F861%2Fs-2.jpg%3F1644078489&sizes=2&tax=0.0&tn=%2Fconfigured_product_view%2Fs%2Fimage%2F949%2F729%2F861%2Fs-3.jpg%3F1644078489&product_id=231642631&edit_link=%2Fdesigner%2Fcustomize%3Fcpid%3D2869429861%26ei%3D1&line_total=1500.0&discount=0.0&name=Canvas+and+Leather+Laptop+Bag&color_id=174413756&qty=5&options=Colors%3A+Brown<br%2F><br%2F>Size%3A+Medium+x+5&id=2869429861
+// $.ajax({
+//   url: '/cart.js',
+//   dataType: "json",
+//   cache: false,
+//   success: function(cart) {
+//     console.log(cart)
+// })
+</script>
+

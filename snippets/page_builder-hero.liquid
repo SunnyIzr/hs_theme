@@ -1,0 +1,24 @@
+<div class="page_builder_section page_builder_{{block.type}} pb_bg_{{block.settings.bg_color}}" id="section_{{block.id}}">
+    <div class="flex_grid align-items-center">
+        <div class="flex_column_half ">
+            <div class="text_column ">
+                <h3 >{{block.settings.title}}</h3>
+                <p>{{block.settings.content}}</p>
+                <a href="#page_builder_inquire_form" class="action_button">Let's Get Started</a>
+            </div>
+        </div>
+        <div class="flex_column_half image_column">
+            <img src="{{block.settings.image_desktop | img_url: '1440x1440'}}" />
+            <h3 class="image_title">{{block.settings.title}}</h3>
+        </div>
+    </div>
+</div>
+
+
+{%- comment -%}
+
+content: "We design and manufacture custom bags and accessories. Have an idea for your own Hudson Sutler bag? For inspiration, our favorite categories and custom projects are featured below. Any information you can provide in terms of colors, size or reference imagery will come in handy as we develop your concepts together."
+image_desktop: "//cdn.shopify.com/s/files/1/0107/5722/files/hero_image.jpg?v=1608577635"
+title: "CUSTOM BAGS"
+
+{%- endcomment -%}

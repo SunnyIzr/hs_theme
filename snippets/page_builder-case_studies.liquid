@@ -1,0 +1,23 @@
+<div class=" page_builder_section page_builder_{{block.type}} pb_bg_{{block.settings.bg_color}}" id="section_{{block.id}}">
+    <div class=" container">
+        <div class="sixteen columns">
+            <h2 class=" center">{{block.settings.title}}</h2>
+            <h6 class="center">{{block.settings.sub_heading}}</h6>
+            <div class="grid_container case_study_grid">
+                {% for i in (1..4) %}
+                {% assign image_string  = 'image_' | append: i %}
+                {% assign title_string = 'title_' | append: i %}
+                {% assign url_string = 'url_' | append: i %}
+                {% if block.settings[image_string] != blank %}
+                <div class="case_study_item" {{ block.shopify_attributes }}>
+                    <a href="{{block.settings[url_string]}}">
+                        <img src="{{block.settings[image_string] | img_url: '800x'}}" />
+                        <p class="case_study_title">{{block.settings[title_string]}}</p>
+                    </a>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

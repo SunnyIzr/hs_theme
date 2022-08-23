@@ -1,0 +1,214 @@
+{% assign location_variant = false %}
+{% assign patchbg = "" %}
+{% for tag in product.tags %}
+  {% comment %}{% if tag contains 'patchbg-' %}
+    {% assign patchbg = tag | append: '.jpg' %}
+  {% endif %}{% endcomment %}
+  {% comment %}{% if tag contains 'VALIDATE_LOCATION' %}
+    {% assign location_variant = true %}
+  {% endif %}{% endcomment %}
+{% if tag contains 'emb:' %}
+    {% assign patchbg = tag | remove: 'emb:' %}
+  {% endif %}
+  {% if tag contains 'embroidery-black-only' %}
+    {% assign luggage_tag = true %}
+  {% endif %}
+  {% if tag contains "mono:"  %}
+	{% assign monosize = tag | remove: 'mono:' | split: '-' %}
+	<style>
+.personalizer .right-container .patch-preview-container .monogram-text.med, .personalizer .right-container .patch-preview-container .monogram-text.large {
+  font-size: {{ monosize.first }}px;
+}
+      .personalizer .right-container .patch-preview-container .monogram-text.small { font-size: {{ monosize.first | divided_by: 2 }}px; }
+      .personalizer .right-container .patch-preview-container .monogram-text { top: {{ monosize.last }}%; }
+	</style>
+  {% endif %}
+{% if tag contains 'patchbg-' %}
+    {% if patchbg == "" %}{% assign patchbg = tag | append: '.jpg' %}{% endif %}
+  {% endif %}
+{% endfor %}
+
+{% for variant in product.variants %}
+    {% if variant.title contains "Personalize" or variant.title contains "Embroider" %}
+      {% assign personalize_variant = variant %}
+    {% endif %}
+{% endfor %}
+
+{% assign patches = 'American Flag, Americas Cup,Aspen,ATX Star,Beach Chair,Bear Paw,Bermuda,Block Island,Canoe Oar,Colorado C,Compass,Dog Paw,Fishers Island,Football,Hang Loose,Helm,Ireland,Liberty Bell,Propeller,Sailboat,Shades,Soccer,SUP,Surf Van,Teepee,Tennis,Thumbs Up,UK,Umbrella,VW Bus,Waves,Anchor,Antlers 2,Antlers,Armadillo,Arrow,Black Lab,California Bear,Chicago Flag,Come and Take It,Eagle 2,Eagle Shield,Eagle,Fly Fishing Fly,Fly Fishing Reel,Golf Ball,Golf Tee,Jeep Willy,Long Horn,Mahi,Mallard,Maple Leaf,Marthas Vineyard,Moustache,Nantucket,Palmetto,Pigeon,Sailfish,Shamrock,Surfing,Alabama,Alaska,Arizona,Arkansas,California,Colorado,Connecticut,Delaware,Florida,Georgia,Hawaii,Idaho,Illinois,Indiana,Iowa,Kansas,Kentucky,Louisiana,Maine,Maryland,Massachusetts,Michigan,Minnesota,Mississippi,Missouri,Montana,Nebraska,Nevada,New Hampshire,New Jersey,New Mexico,New York,North Carolina,North Dakota,Ohio,Oklahoma,Oregon,Pennsylvania,Rhode Island,South Carolina,South Dakota,Tennessee,Texas,Utah,Vermont,Virginia,Washington,West Virginia,Wisconsin,Wyoming' | split: ',' %}
+
+{% if luggage_tag == true %}
+	{% assign colors = 'Black' | split: ',' %}
+{% else %}
+  {% assign colors = 'Black,Scarlet Red,Safron,Khaki,Hunter Green,Sky Blue,Navy Blue,Charcoal Grey,White,Pink,Orange,Kelly Green,Olive Green,Royal Blue,Purple,Grey' | split: ',' %}
+{% endif %}
+
+{% assign color_names = 'Black,Red,Yellow,Khaki,Hunter Green,Sky Blue,Navy,Charcoal Grey,White,Pink,Orange,Kelly Green,Olive Green,Royal Blue,Purple,Light Grey' | split: ',' %}
+
+{% assign downcase_title = product.title | downcase %}
+
+
+
+<div id='personalizerModal' class='modal'>
+    <div class='container section personalizer'>
+      <div class='fourteen columns'>
+        <ul class='personalizer-tabs tabs'>
+          <li><a class='active' href='#' data-target='#monogramScreen'>Monogram</a></li>
+          <li style='display: none;'><a href='#' data-target='#patchScreen'>Icon</a></li>
+          {% comment %}
+          <li><a href='#'>Logo Upload</a></li>
+          {% endcomment %}
+        </ul>
+      </div>
+      <div id='monogramScreen' class='active personalizer-screen'>
+        <form class="product__form" id="product{{ product.id }}__form" action="/cart/add" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="id" id="product-select" data-sku="{{ personalize_variant.sku }}" value="{{ personalize_variant.id }}">
+          <input type="hidden" id='quantity' name="quantity" value='1' class='quantity'>
+          <input type='hidden' id='monogramStyle' class='monogramFont' name='properties[Monogram Style]' value='Athletic'>
+          <input type='hidden' id='monogramColor' class='monogramColor' name='properties[Monogram Color]' value='Royal'>
+          
+          {% if location_variant %}
+            <input type='hidden' id='monogramLocation' class='monogramLocation' name='properties[Monogram Location]' value=''>
+          {% endif %}
+          <div class='six columns font-monogram-select-screen'>
+            <div class='font-selection'>
+              <h3>Select Font</h3>
+              <div class='fonts'>
+                <div class='font selected academic-font' data-font='Academic' data-fontvalue='Athletic'>
+                  <p>ATHLETIC</p>
+                </div>
+                <div class='font bwmodelica-font' data-font='BWModelica' data-fontvalue='Standard'>
+                  <p>STANDARD</p>
+                </div>
+                <div class='font ebgaramond-font' data-font='EBGaramond' data-fontvalue='Times'>
+                  <p>TIMES</p>
+                </div>
+                <div class='font greek-font' data-font='Greek' data-fontvalue='Greek' style='display: none;'>
+                  <p>GREEK</p>
+                </div>
+                <div class='font ' data-font='Maritimee' data-fontvalue='Maritime' style='display: none;'>
+                  <p style="position: relative;font-family:Maritimee;margin-top: 22px;margin-bottom: 28px;">ADFWU<span style="font-family:Questrial;font-size: 19px;position: absolute;left: 50%;transform:  translateX(-50%);top: 64%;">(Maritime)</span></p>
+                </div>
+              </div>
+            </div>
+            <div class='monogram-input'>
+              <h3>Enter Text</h3>
+              <p class='error hide'>Please enter monogram text</p>
+              <div class='text-input-containers'>
+                <div class='text-input-container'>
+                  <div class='text-input-num'>1.</div>
+                  <input type='text' class='initials' maxlength='10' autocomplete="off" autocorrect='off' autocapitalize='off' required name='properties[Monogram Text]'/>
+                </div>
+              </div>
+            </div>
+            {% render 'monogram-notes' %}
+          </div>
+          <div class='seven columns hide location-select-screen'>
+            <div class='location-selection'>
+              <h3>Select Location</h3>
+              <p class='error hide'>Please select location</p>
+              <div class='locations'>
+                <div class='location' data-location='Duffel: End'>
+                  <img src='{{ "location_1_1_image.jpg" | asset_url }}'>
+                </div>
+                <div class='location' data-location='Duffle: Side'>
+                  <img src='{{ "location_1_2_image.jpg" | asset_url }}'>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class='eight columns right-container'>
+            <div class='color-container'>
+              <h3>Select Color</h3>
+              <div class='colors'>
+                {% for color in colors %}
+                {% assign color_name = color_names[forloop.index0] %}
+                  <div class='color {% if forloop.index0 == 0 %}selected{% endif %} {{ color | handleize }}' data-color='{{ color }}'><span class='tooltip'>{{ color_name }}</span></div>
+                {% endfor %}
+              </div>
+            </div>
+            <div class='patch-preview-container'>
+              <div class='monogram-text {% if luggage_tag == true %}luggage_tag small{%else%}large{%endif%}'></div>
+              <img class='patch-preview' src='{{ patchbg | file_url }}'>
+            </div>
+          </div>
+          <div class='fourteen columns personalizer-continue'>
+            <a href='#' class="action_button back_button hide" >Back</a>
+
+            <a href='#' class="action_button proceed {% if location_variant %}{%else%}hide{% endif %}" >Continue</a>
+
+            <input type='submit' name='add' class="action_button add_to_cart {% if location_variant %}hide location-check{% endif %}" value='Check Out'/>
+          </div>
+        </form>
+      </div>
+      <div id='patchScreen' class='personalizer-screen'>
+        <form class="product__form" id="product{{ product.id }}__form" action="/cart/add" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="id" id="product-select" data-sku="{{ personalize_variant.sku }}" value="{{ personalize_variant.id }}">
+          <input type="hidden" id='quantity' name="quantity" value='1' class='quantity'>
+          <input type='hidden' id='monogramPatch' class='monogramFont' name='properties[Monogram Patch]' value='{{ patches[0] }}'>
+          <input type='hidden' id='patchColor' class='monogramColor' name='properties[Monogram Color]' value='Black'>
+          
+          {% if location_variant %}
+            <input type='hidden' id='monogramLocation' class='monogramLocation' name='properties[Monogram Location]' value=''>
+          {% endif %}
+          <div class='seven columns font-monogram-select-screen'>
+            <div class='patch-selection'>
+              <h3>Select Icon</h3>
+              <div class='patches'>
+              
+
+              {% for patch in patches %}
+                {% assign patch_img_name = patch | handleize | append: '.png' %}
+
+                <div class='patch-opt {% if forloop.index0 == 0 %}selected{% endif %}'  data-patchvalue='{{ patch }}' style="-webkit-mask-image:url({{ patch_img_name | file_url }})">
+                  <div class='patch-overlay'></div>
+                  <img src='{{ "empty.png" | asset_url }}'>
+                </div>
+              {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class='seven columns hide location-select-screen'>
+            <div class='location-selection'>
+              <h3>Select Location</h3>
+              <p class='error hide'>Please select location</p>
+              <div class='locations'>
+                <div class='location' data-location='Duffel: End'>
+                  <img src='{{ "location_1_1_image.jpg" | asset_url }}'>
+                </div>
+                <div class='location' data-location='Duffle: Side'>
+                  <img src='{{ "location_1_2_image.jpg" | asset_url }}'>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class='seven columns right-container'>
+            <div class='color-container'>
+              <h3>Select Color</h3>
+              <div class='colors'>
+                {% for color in colors %}
+                  <div class='color {% if forloop.index0 == 0 %}selected{% endif %} {{ color | handleize }}' data-color='{{ color }}'></div>
+                {% endfor %}
+              </div>
+            </div>
+            <div class='patch-preview-container'>
+              {% assign first_patch_img_name = patches[0] | handleize | append: '.png' %}
+              <div class='monogram-icon' style="-webkit-mask-image:url({{ first_patch_img_name | file_url }})"></div>
+              <img class='patch-preview' src='{{ patchbg | file_url }}'>
+            </div>
+          </div>
+          <div class='fourteen columns personalizer-continue'>
+            <a href='#' class="action_button back_button hide" >Back</a>
+
+            <a href='#' class="action_button proceed {% if location_variant %}{%else%}hide{% endif %}" >Continue</a>
+
+            <input type='submit' name='add' class="action_button add_to_cart {% if location_variant %}hide location-check{% endif %}" value='Check Out'/>
+          </div>
+        </form>
+      </div>
+    </div>
+</div>
+
+{% for patch in patches %}
+{% assign patch_img_name = patch | handleize | append: '.png' %}
+  <img style='display:none;' src='{{ patch_img_name | file_url }}'>
+{% endfor %}

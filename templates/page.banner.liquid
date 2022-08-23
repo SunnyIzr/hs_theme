@@ -1,0 +1,9 @@
+{% capture captured_page %}
+{% comment %}
+  The contents of the page.banner.liquid template can be found in /sections/page-banner-template.liquid
+{% endcomment %}
+
+{% section 'page-banner-template' %}
+
+{% endcapture %}
+{% include 'password-protect' %}

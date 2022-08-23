@@ -1,0 +1,35 @@
+
+<div id="videoContainer">
+  <div class="overlay"></div>
+  <img class='for-mobile' src="{{ 'paddle-still.jpg' | asset_url }}">
+  <video autoplay="" loop="" muted="" poster="" id="vidLoop" class="hidden-xs">
+    <source src="{{ 'video-loop.webm' | asset_url }}" type="video/webm">
+    <source src="{{ 'video-loop.mp4' | asset_url }}" type="video/mp4">
+  </video>
+  <h1 class="headline">HIGHLIGHTS FROM THE<br/>NJ LEAGUE CLASSIC</h1>
+  <img class='play' src="{{ 'video-play.png' | asset_url}}" />
+  <div id='vimeo-embed' style="display: none; padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/668397258?h=5c214faa17&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" title="NJ League Classic Paddle Tournament - Hudson Sutler"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+</div>
+
+
+<script>
+  const startFullVideo = () => {
+    console.log('Starting Full Video')
+    $('#vidLoop').hide()
+    $('#videoContainer img').hide()
+    $('#videoContainer .overlay').hide()
+    $('#videoContainer .headline').hide()
+    iframe = document.querySelector('iframe');
+    player = new Vimeo.Player(iframe);
+    // $('#vidFull').show()
+    // $('#vidFull').trigger('play');
+    $('#vimeo-embed').show()
+    player.play()
+  }
+  
+  $(document).ready(function(e){
+    $('#videoContainer').click(function(e){
+      startFullVideo()
+    })
+  })
+</script>

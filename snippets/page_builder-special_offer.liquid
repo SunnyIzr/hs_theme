@@ -1,0 +1,33 @@
+<div class="page_builder_section page_builder_{{block.type}} " id="section_{{block.id}}">
+    <div class="container">
+        <h2>{{block.settings.title}}</h2>
+        <h6>{{block.settings.content}}</h6>
+            <form id="page_builder_form" class="klaviyo_styling klaviyo_gdpr_embed_{{block.settings.klaviyoID}}" action="//manage.kmail-lists.com/subscriptions/subscribe" data-ajax-submit="//manage.kmail-lists.com/ajax/subscriptions/subscribe" method="GET" target="_blank" novalidate="novalidate">
+                <input type="hidden" name="g" value="{{block.settings.klaviyoID}}">
+                <input type="hidden" name="$fields" value="$consent">
+                <input type="hidden" name="$list_fields" value="$consent">
+                <div class="inline_form_group">
+                  <input type="text" placeholder="{{block.settings.form_placeholder}}" name="email" id="k_id_email_{{block.settings.id}}" class="special_offer_form_text"/>
+                  <input type="submit" value="{{block.settings.form_cta}}" class="special_offer_form_submit"/>
+                </div>
+                <div class="klaviyo_messages" style="margin-top: 10px;">
+                  <div class="success_message" style="display:none;"></div>
+                  <div class="error_message" style="display:none;"></div>
+                </div>
+              </form>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="//www.klaviyo.com/media/js/public/klaviyo_subscribe.js"></script>
+<script type="text/javascript">
+  KlaviyoSubscribe.attachToForms('#page_builder_form', {
+    hide_form_on_success: true,
+    extra_properties: {
+      $source: '$embed',
+      $method_type: "Klaviyo Form",
+      $method_id: 'embed',
+      $consent_version: 'Embed default text'
+    }
+  });
+</script>

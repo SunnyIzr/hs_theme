@@ -1,0 +1,864 @@
+
+{% for block in section.blocks %}
+{% assign template_file = 'page_builder-' | append: block.type | handle | strip%}
+{% include template_file %}
+{% endfor %}
+{% schema %}
+{
+    "name": "Landing Page - PB",
+    "blocks": [
+        {
+            "type": "hero",
+            "name": "Hero",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "image_desktop",
+                    "label": "Image"
+                },
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Heading"
+                },
+                {
+                    "type": "textarea",
+                    "id": "content",
+                    "label": "Content"
+                },
+                {
+                    "type": "select",
+                    "id": "bg_color",
+                    "label": "Background Color",
+                    "options": [
+                        {
+                            "value": "white",
+                            "label": "White"
+                        },
+						{
+                            "value": "cream",
+                            "label": "Cream"
+                        },
+                        {
+                            "value": "blue",
+                            "label": "Blue"
+                        }
+                    ],
+                    "default": "white"
+                }
+            ]
+        },
+        {
+            "type": "special_offer",
+            "name": "Special Offer",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Heading"
+                },
+                {
+                    "type": "textarea",
+                    "id": "content",
+                    "label": "Content"
+                },
+                {
+                    "type": "text",
+                    "id": "klaviyoID",
+                    "label": "Klaviyo ID"
+                },
+                {
+                    "type": "text",
+                    "id": "form_placeholder",
+                    "label": "Form Placeholder"
+                },
+                {
+                    "type": "text",
+                    "id": "form_cta",
+                    "label": "Form CTA"
+                }
+            ]
+        },
+        {
+            "type": "process",
+            "name": "Process",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Heading"
+                },
+                {
+                    "type": "textarea",
+                    "id": "content",
+                    "label": "Content"
+                },
+                {
+                    "type": "header",
+                    "content": "Process 1"
+                },
+                {
+                    "type": "text",
+                    "id": "title_1",
+                    "label": "Process Heading 1"
+                },
+                {
+                    "type": "textarea",
+                    "id": "content_1",
+                    "label": "Process Content 1"
+                },
+                {
+                    "type": "header",
+                    "content": "Process 2"
+                },
+                {
+                    "type": "text",
+                    "id": "title_2",
+                    "label": "Process Heading 2"
+                },
+                {
+                    "type": "textarea",
+                    "id": "content_2",
+                    "label": "Process Content 2"
+                },
+                {
+                    "type": "header",
+                    "content": "Process 3"
+                },
+                {
+                    "type": "text",
+                    "id": "title_3",
+                    "label": "Process Heading 3"
+                },
+                {
+                    "type": "textarea",
+                    "id": "content_3",
+                    "label": "Process Content 3"
+                },
+                {
+                    "type": "select",
+                    "id": "bg_color",
+                    "label": "Background Color",
+                    "options": [
+                        {
+                            "value": "white",
+                            "label": "White"
+                        },
+						{
+                            "value": "cream",
+                            "label": "Cream"
+                        },
+                        {
+                            "value": "blue",
+                            "label": "Blue"
+                        }
+                    ],
+                    "default": "white"
+                }
+            ]
+        },
+        {
+            "type": "gallery",
+            "name": "Gallery",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Heading"
+                },
+                {
+                    "type": "text",
+                    "id": "sub_heading",
+                    "label": "Sub-Heading"
+                },
+                {
+                    "type": "header",
+                    "content": "Gallery Image 1"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "image_1",
+                    "label": "Image 1"
+                },
+                {
+                    "type": "text",
+                    "id": "image_caption_1",
+                    "label": "Image Caption 1"
+                },
+                {
+                    "type": "header",
+                    "content": "Gallery Image 2"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "image_2",
+                    "label": "Image 2"
+                },
+                {
+                    "type": "text",
+                    "id": "image_caption_2",
+                    "label": "Image Caption 2"
+                },
+                {
+                    "type": "header",
+                    "content": "Gallery Image 3"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "image_3",
+                    "label": "Image 3"
+                },
+                {
+                    "type": "text",
+                    "id": "image_caption_3",
+                    "label": "Image Caption 3"
+                },
+                {
+                    "type": "header",
+                    "content": "Gallery Image 4"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "image_4",
+                    "label": "Image 4"
+                },
+                {
+                    "type": "text",
+                    "id": "image_caption_4",
+                    "label": "Image Caption 4"
+                },
+                {
+                    "type": "header",
+                    "content": "Gallery Image 5"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "image_5",
+                    "label": "Image 5"
+                },
+                {
+                    "type": "text",
+                    "id": "image_caption_5",
+                    "label": "Image Caption 5"
+                },
+                {
+                    "type": "header",
+                    "content": "Gallery Image 6"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "image_6",
+                    "label": "Image 6"
+                },
+                {
+                    "type": "text",
+                    "id": "image_caption_6",
+                    "label": "Image Caption 6"
+                },
+                {
+                    "type": "header",
+                    "content": "Gallery Image 7"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "image_7",
+                    "label": "Image 7"
+                },
+                {
+                    "type": "text",
+                    "id": "image_caption_7",
+                    "label": "Image Caption 7"
+                },
+                {
+                    "type": "header",
+                    "content": "Gallery Image 8"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "image_8",
+                    "label": "Image 8"
+                },
+                {
+                    "type": "text",
+                    "id": "image_caption_8",
+                    "label": "Image Caption 8"
+                },
+                {
+                    "type": "header",
+                    "content": "Gallery Image 9"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "image_9",
+                    "label": "Image 9"
+                },
+                {
+                    "type": "text",
+                    "id": "image_caption_9",
+                    "label": "Image Caption 9"
+                },
+                {
+                    "type": "select",
+                    "id": "bg_color",
+                    "label": "Background Color",
+                    "options": [
+                        {
+                            "value": "white",
+                            "label": "White"
+                        },
+                        {
+                            "value": "blue",
+                            "label": "Blue"
+                        }
+                    ],
+                    "default": "white"
+                }
+            ]
+        },
+		{
+            "type": "lggallery",
+            "name": "Linked Gallery",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "lgtitle",
+                    "label": "Heading"
+                },
+                {
+                    "type": "text",
+                    "id": "lgsub_heading",
+                    "label": "Sub-Heading"
+                },
+                {
+                    "type": "header",
+                    "content": "Gallery Image 1"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "lgimage_1",
+                    "label": "Image 1"
+                },
+                {
+                    "type": "text",
+                    "id": "lgimage_caption_1",
+                    "label": "Image Caption 1"
+                },
+                {
+                    "type": "url",
+                    "id": "lgimage_link_1",
+                    "label": "Image Link 1"
+                },
+                {
+                    "type": "header",
+                    "content": "Gallery Image 2"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "lgimage_2",
+                    "label": "Image 2"
+                },
+                {
+                    "type": "text",
+                    "id": "lgimage_caption_2",
+                    "label": "Image Caption 2"
+                },
+                {
+                    "type": "url",
+                    "id": "lgimage_link_2",
+                    "label": "Image Link 2"
+                },
+                {
+                    "type": "header",
+                    "content": "Gallery Image 3"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "lgimage_3",
+                    "label": "Image 3"
+                },
+                {
+                    "type": "text",
+                    "id": "lgimage_caption_3",
+                    "label": "Image Caption 3"
+                },
+                {
+                    "type": "url",
+                    "id": "lgimage_link_3",
+                    "label": "Image Link 3"
+                },
+                {
+                    "type": "header",
+                    "content": "Gallery Image 4"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "lgimage_4",
+                    "label": "Image 4"
+                },
+                {
+                    "type": "text",
+                    "id": "lgimage_caption_4",
+                    "label": "Image Caption 4"
+                },
+                {
+                    "type": "url",
+                    "id": "lgimage_link_4",
+                    "label": "Image Link 4"
+                },
+                {
+                    "type": "header",
+                    "content": "Gallery Image 5"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "lgimage_5",
+                    "label": "Image 5"
+                },
+                {
+                    "type": "text",
+                    "id": "lgimage_caption_5",
+                    "label": "Image Caption 5"
+                },
+                {
+                    "type": "url",
+                    "id": "lgimage_link_5",
+                    "label": "Image Link 5"
+                },
+                {
+                    "type": "header",
+                    "content": "Gallery Image 6"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "lgimage_6",
+                    "label": "Image 6"
+                },
+                {
+                    "type": "text",
+                    "id": "lgimage_caption_6",
+                    "label": "Image Caption 6"
+                },
+                {
+                    "type": "url",
+                    "id": "lgimage_link_6",
+                    "label": "Image Link 6"
+                },
+                {
+                    "type": "header",
+                    "content": "Gallery Image 7"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "lgimage_7",
+                    "label": "Image 7"
+                },
+                {
+                    "type": "text",
+                    "id": "lgimage_caption_7",
+                    "label": "Image Caption 7"
+                },
+                {
+                    "type": "url",
+                    "id": "lgimage_link_7",
+                    "label": "Image Link 7"
+                },
+                {
+                    "type": "header",
+                    "content": "Gallery Image 8"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "lgimage_8",
+                    "label": "Image 8"
+                },
+                {
+                    "type": "text",
+                    "id": "lgimage_caption_8",
+                    "label": "Image Caption 8"
+                },
+                {
+                    "type": "url",
+                    "id": "lgimage_link_8",
+                    "label": "Image Link 8"
+                },
+                {
+                    "type": "header",
+                    "content": "Gallery Image 9"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "lgimage_9",
+                    "label": "Image 9"
+                },
+                {
+                    "type": "text",
+                    "id": "lgimage_caption_9",
+                    "label": "Image Caption 9"
+                },
+                {
+                    "type": "url",
+                    "id": "lgimage_link_9",
+                    "label": "Image Link 9"
+                },
+                {
+                    "type": "select",
+                    "id": "lgbg_color",
+                    "label": "Background Color",
+                    "options": [
+                        {
+                            "value": "white",
+                            "label": "White"
+                        },
+                        {
+                            "value": "blue",
+                            "label": "Blue"
+                        }
+                    ],
+                    "default": "white"
+                }
+            ]
+        },
+        {
+            "type": "case_studies",
+            "name": "Case Studies",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Heading"
+                },
+                {
+                    "type": "text",
+                    "id": "sub_heading",
+                    "label": "Sub-Heading"
+                },
+                {
+                    "type": "header",
+                    "content": "Case Study 1"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "image_1",
+                    "label": "Image 1"
+                },
+                {
+                    "type": "text",
+                    "id": "title_1",
+                    "label": "Title 1"
+                },
+                {
+                    "type": "url",
+                    "id": "url_1",
+                    "label": "Case Study URL 1"
+                },
+                {
+                    "type": "header",
+                    "content": "Case Study 2"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "image_2",
+                    "label": "Image 2"
+                },
+                {
+                    "type": "text",
+                    "id": "title_2",
+                    "label": "Title 2"
+                },
+                {
+                    "type": "url",
+                    "id": "url_2",
+                    "label": "Case Study URL 2"
+                },
+                {
+                    "type": "header",
+                    "content": "Case Study 3"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "image_3",
+                    "label": "Image 3"
+                },
+                {
+                    "type": "text",
+                    "id": "title_3",
+                    "label": "Title 3"
+                },
+                {
+                    "type": "url",
+                    "id": "url_3",
+                    "label": "Case Study URL 3"
+                },
+                {
+                    "type": "header",
+                    "content": "Case Study 4"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "image_4",
+                    "label": "Image 4"
+                },
+                {
+                    "type": "text",
+                    "id": "title_4",
+                    "label": "Title 4"
+                },
+                {
+                    "type": "url",
+                    "id": "url_4",
+                    "label": "Case Study URL 4"
+                },
+                {
+                    "type": "select",
+                    "id": "bg_color",
+                    "label": "Background Color",
+                    "options": [
+                        {
+                            "value": "white",
+                            "label": "White"
+                        },
+                        {
+                            "value": "blue",
+                            "label": "Blue"
+                        }
+                    ],
+                    "default": "white"
+                }
+            ]
+        },
+        {
+            "type": "form",
+            "name": "Form",
+            "settings": [
+                {
+                    "type": "select",
+                    "id": "bg_color",
+                    "label": "Background Color",
+                    "options": [
+                        {
+                            "value": "white",
+                            "label": "White"
+                        },
+                        {
+                            "value": "blue",
+                            "label": "Blue"
+                        }
+                    ],
+                    "default": "white"
+                }
+            ]
+        },
+        {
+            "type": "logos",
+            "name": "Logos",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Heading"
+                },
+                {
+                    "type": "header",
+                    "content": "Logo 1"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "item_image_1",
+                    "label": "Item Image 1"
+                },
+                {
+                    "type": "header",
+                    "content": "Logo 2"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "item_image_2",
+                    "label": "Item Image 2"
+                },
+                {
+                    "type": "header",
+                    "content": "Logo 3"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "item_image_3",
+                    "label": "Item Image 3"
+                },
+                {
+                    "type": "header",
+                    "content": "Logo 4"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "item_image_4",
+                    "label": "Item Image 4"
+                },
+                {
+                    "type": "header",
+                    "content": "Logo 5"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "item_image_5",
+                    "label": "Item Image 5"
+                },
+                {
+                    "type": "header",
+                    "content": "Logo 6"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "item_image_6",
+                    "label": "Item Image 6"
+                },
+                {
+                    "type": "header",
+                    "content": "Logo 7"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "item_image_7",
+                    "label": "Item Image 7"
+                },
+                {
+                    "type": "header",
+                    "content": "Logo 8"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "item_image_8",
+                    "label": "Item Image 8"
+                },
+                {
+                    "type": "header",
+                    "content": "Logo 9"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "item_image_9",
+                    "label": "Item Image 9"
+                },
+                {
+                    "type": "header",
+                    "content": "Logo 10"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "item_image_10",
+                    "label": "Item Image 10"
+                },
+                {
+                    "type": "header",
+                    "content": "Logo 11"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "item_image_11",
+                    "label": "Item Image 11"
+                },
+                {
+                    "type": "header",
+                    "content": "Logo 12"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "item_image_12",
+                    "label": "Item Image 12"
+                },
+                {
+                    "type": "header",
+                    "content": "Logo 13"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "item_image_13",
+                    "label": "Item Image 13"
+                },
+                {
+                    "type": "header",
+                    "content": "Logo 14"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "item_image_14",
+                    "label": "Item Image 14"
+                },
+                {
+                    "type": "select",
+                    "id": "bg_color",
+                    "label": "Background Color",
+                    "options": [
+                        {
+                            "value": "white",
+                            "label": "White"
+                        },
+                        {
+                            "value": "blue",
+                            "label": "Blue"
+                        }
+                    ],
+                    "default": "white"
+                }
+            ]
+        },
+        {
+            "type": "testimonials",
+            "name": "Testimonials",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "background_image_desktop",
+                    "label": "Background Image"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "background_image_mobile",
+                    "label": "Mobile Background Image"
+                },
+                {
+                    "type": "header",
+                    "content": "Testimonial 1"
+                },
+                {
+                    "type": "text",
+                    "id": "author_1",
+                    "label": "Author 1"
+                },
+                {
+                    "type": "textarea",
+                    "id": "testimonial_1",
+                    "label": "Testimonial 1"
+                },
+                {
+                    "type": "header",
+                    "content": "Testimonial 2"
+                },
+                {
+                    "type": "text",
+                    "id": "author_2",
+                    "label": "Author 2"
+                },
+                {
+                    "type": "textarea",
+                    "id": "testimonial_2",
+                    "label": "Testimonial 2"
+                },
+                {
+                    "type": "header",
+                    "content": "Testimonial 3"
+                },
+                {
+                    "type": "text",
+                    "id": "author_3",
+                    "label": "Author 3"
+                },
+                {
+                    "type": "textarea",
+                    "id": "testimonial_3",
+                    "label": "Testimonial 3"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

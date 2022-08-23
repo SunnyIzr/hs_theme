@@ -1,0 +1,24 @@
+<div class=" page_builder_section page_builder_{{block.type}} pb_bg_{{block.settings.lgbg_color}}"
+id="section_{{block.id}}">
+<div class="gallery-section container">
+    <div class="sixteen columns">
+        <h2 class=" center">{{block.settings.lgtitle}}</h2>
+        <h6 class="center">{{block.settings.lgsub_heading}}</h6>
+        <div class="grid_container gallery_grid" id="pb_gallery_{{block.id}}">
+            {% for i in (1..9) %}
+            {% assign image_string = 'lgimage_' | append: i %}
+            {% assign caption_string = 'lgimage_caption_' | append: i %}
+          	{% assign link_string = 'lgimage_link_' | append: i %}
+            {% if block.settings[image_string] != blank and  block.settings[caption_string] != blank %}
+            <div class="gallery_image gallery_item" {{ block.shopify_attributes }}>
+                {% if block.settings[link_string] != blank %}<a href="{{block.settings[link_string] }}">{% endif %}
+                {{ block.settings[image_string] |  img_url: '800x800', crop: 'center' | img_tag: block.settings[caption_string] }}
+                <p class="gallery_caption">{{block.settings[caption_string]}}</p>
+            {% if block.settings[link_string] != blank %}</a>{% endif %}
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+</div>
+</div>
